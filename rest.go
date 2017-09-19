@@ -27,6 +27,8 @@ type Request struct {
 	Headers     map[string]string
 	QueryParams map[string]string
 	Body        []byte
+	Username    string
+	Password    string
 }
 
 // RestError is a struct for an error handling.
@@ -80,6 +82,11 @@ func BuildRequestObject(request Request) (*http.Request, error) {
 	if len(request.Body) > 0 && !exists {
 		req.Header.Set("Content-Type", "application/json")
 	}
+
+	if len(request.Username) > 0 && len(request.Password) > 0 {
+		req.SetBasicAuth(request.Username, request.Password)
+	}
+
 	return req, err
 }
 
